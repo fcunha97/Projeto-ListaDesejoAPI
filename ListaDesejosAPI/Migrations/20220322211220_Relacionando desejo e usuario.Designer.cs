@@ -2,14 +2,16 @@
 using ListaDesejosAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ListaDesejosAPI.Migrations
 {
     [DbContext(typeof(UsuarioContext))]
-    partial class UsuarioContextModelSnapshot : ModelSnapshot
+    [Migration("20220322211220_Relacionando desejo e usuario")]
+    partial class Relacionandodesejoeusuario
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -45,12 +47,13 @@ namespace ListaDesejosAPI.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("UsuarioId")
+                    b.Property<int>("UsuarioID")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UsuarioId");
+                    b.HasIndex("UsuarioID")
+                        .IsUnique();
 
                     b.ToTable("Desejos");
                 });
@@ -58,8 +61,8 @@ namespace ListaDesejosAPI.Migrations
             modelBuilder.Entity("ListaDesejosAPI.Models.Desejo", b =>
                 {
                     b.HasOne("ListaDesejosAPI.Data.Usuario", "Usuario")
-                        .WithMany("Desejos")
-                        .HasForeignKey("UsuarioId")
+                        .WithOne("Desejo")
+                        .HasForeignKey("ListaDesejosAPI.Models.Desejo", "UsuarioID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -68,7 +71,7 @@ namespace ListaDesejosAPI.Migrations
 
             modelBuilder.Entity("ListaDesejosAPI.Data.Usuario", b =>
                 {
-                    b.Navigation("Desejos");
+                    b.Navigation("Desejo");
                 });
 #pragma warning restore 612, 618
         }
