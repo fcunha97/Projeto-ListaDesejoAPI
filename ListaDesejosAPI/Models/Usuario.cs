@@ -12,7 +12,7 @@ namespace ListaDesejosAPI.Data
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Apenas letras")]
-        public string Loguin { get; set; }
+        public string Login { get; set; }
 
         [Required]
         public string Senha { get; set; }

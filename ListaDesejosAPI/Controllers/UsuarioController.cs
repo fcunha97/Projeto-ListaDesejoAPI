@@ -19,9 +19,10 @@ namespace ListaDesejosAPI.Controllers
         }
 
         [HttpPost]
-        public IActionResult AdicionaUsurario([FromBody] Usuario usuario) {
-           
-                     
+        public IActionResult AdicionaUsurario([FromBody] Usuario usuario)
+        {
+
+
             _context.Usuarios.Add(usuario);
             _context.SaveChanges();
             return CreatedAtAction(nameof(RecuperaUsuarioPorId), new { Id = usuario.Id }, usuario);

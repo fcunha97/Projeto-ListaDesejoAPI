@@ -58,7 +58,7 @@ namespace ListaDesejosAPI.Controllers
 
             desejo.Descricao = desejoNovo.Descricao;          
             _context.SaveChanges();
-            return NoContent();
+            return NotFound();
         }
 
         [HttpDelete("{id}")]
@@ -72,7 +72,7 @@ namespace ListaDesejosAPI.Controllers
             }
                 _context.Remove(desejo);
                 _context.SaveChanges();
-                return NoContent();
+                return NotFound();
         }
     }
 }
