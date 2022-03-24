@@ -8,8 +8,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ListaDesejosAPI.Migrations
 {
     [DbContext(typeof(UsuarioContext))]
-    [Migration("20220322211220_Relacionando desejo e usuario")]
-    partial class Relacionandodesejoeusuario
+    [Migration("20220324212737_Login 3")]
+    partial class Login3
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -24,7 +24,7 @@ namespace ListaDesejosAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("Loguin")
+                    b.Property<string>("Login")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -47,13 +47,12 @@ namespace ListaDesejosAPI.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("UsuarioID")
+                    b.Property<int>("UsuarioId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UsuarioID")
-                        .IsUnique();
+                    b.HasIndex("UsuarioId");
 
                     b.ToTable("Desejos");
                 });
@@ -61,8 +60,8 @@ namespace ListaDesejosAPI.Migrations
             modelBuilder.Entity("ListaDesejosAPI.Models.Desejo", b =>
                 {
                     b.HasOne("ListaDesejosAPI.Data.Usuario", "Usuario")
-                        .WithOne("Desejo")
-                        .HasForeignKey("ListaDesejosAPI.Models.Desejo", "UsuarioID")
+                        .WithMany("Desejos")
+                        .HasForeignKey("UsuarioId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -71,7 +70,7 @@ namespace ListaDesejosAPI.Migrations
 
             modelBuilder.Entity("ListaDesejosAPI.Data.Usuario", b =>
                 {
-                    b.Navigation("Desejo");
+                    b.Navigation("Desejos");
                 });
 #pragma warning restore 612, 618
         }
