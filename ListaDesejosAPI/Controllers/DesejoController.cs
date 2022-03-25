@@ -20,8 +20,6 @@ namespace ListaDesejosAPI.Controllers
         [HttpPost]
         public IActionResult AdicionaDesejo([FromBody] Desejo desejo)
         {
-
-
             _context.Desejos.Add(desejo);
             _context.SaveChanges();
             return CreatedAtAction(nameof(RecuperaDesejoPorId), new { Id = desejo.Id }, desejo);
