@@ -1,7 +1,9 @@
 ﻿using ListaDesejosAPI.Data;
 using ListaDesejosAPI.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
+using System.Security.Claims;
 
 namespace ListaDesejosAPI.Controllers
 {
@@ -18,11 +20,14 @@ namespace ListaDesejosAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult AdicionaDesejo([FromBody] Desejo desejo)
         {
+            
             _context.Desejos.Add(desejo);
             _context.SaveChanges();
             return CreatedAtAction(nameof(RecuperaDesejoPorId), new { Id = desejo.Id }, desejo);
+           
         }
 
         [HttpGet]

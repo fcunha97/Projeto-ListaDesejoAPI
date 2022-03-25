@@ -14,7 +14,7 @@ namespace ListaDesejosAPI.Controllers
         [HttpGet]
         [Authorize]
 
-        public IActionResult Authenticate()
+        public IActionResult Authenticate() 
         {
             var aut = HttpContext.User.Identity as ClaimsIdentity;
             var usuario = aut.Name;
