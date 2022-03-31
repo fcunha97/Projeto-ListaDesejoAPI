@@ -2,6 +2,9 @@
 using ListaDesejosAPI.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 
@@ -23,26 +26,31 @@ namespace ListaDesejosAPI.Controllers
         [Authorize]
         public IActionResult AdicionaDesejo([FromBody] Desejo desejo)
         {
-            
+
+            var id = HttpContext.User.Claims.First(x => x.Type == JwtRegisteredClaimNames.Jti).Value;
+
+            desejo.UsuarioId = Convert.ToInt32(id);
+
             _context.Desejos.Add(desejo);
-            _context.SaveChanges();
+
+            _context.SaveChanges();    
+            
             return CreatedAtAction(nameof(RecuperaDesejoPorId), new { Id = desejo.Id }, desejo);
            
         }
 
-        [HttpGet]
-        public IActionResult RecuperaDesejo()
-        {
-            return Ok(_context.Desejos);
-        }
+     
 
-        [HttpGet("{id}")]
-        public IActionResult RecuperaDesejoPorId(int id)
+        [HttpGet]
+        [Authorize]
+        public IActionResult RecuperaDesejoPorId()
         {
-            Desejo desejo = _context.Desejos.FirstOrDefault(desejo => desejo.Id == id);
-            if (desejo != null)
+            var id = Convert.ToInt32(HttpContext.User.Claims.First(x => x.Type == JwtRegisteredClaimNames.Jti).Value); 
+
+            List<Desejo> desejos = _context.Desejos.Where(x => x.UsuarioId == id).ToList();
+            if (desejos != null)
             {
-                return Ok(desejo);
+                return Ok(desejos);
             }
 
             return NotFound();
@@ -50,6 +58,7 @@ namespace ListaDesejosAPI.Controllers
 
 
         [HttpPut("{id}")]
+        [Authorize]
 
         public IActionResult AlteraDesejoPorid(int id, [FromBody] Desejo desejoNovo)
         {
@@ -61,10 +70,11 @@ namespace ListaDesejosAPI.Controllers
 
             desejo.Descricao = desejoNovo.Descricao;          
             _context.SaveChanges();
-            return NotFound();
+            return NoContent();
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
 
         public IActionResult DeletaDesejo(int id) {
 
@@ -75,8 +85,7 @@ namespace ListaDesejosAPI.Controllers
             }
                 _context.Remove(desejo);
                 _context.SaveChanges();
-                return NotFound();
+                return NoContent();
         }
     }
 }
-

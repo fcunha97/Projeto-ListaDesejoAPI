@@ -21,11 +21,19 @@ namespace ListaDesejosAPI.Controllers
         [HttpPost]
         public IActionResult AdicionaUsurario([FromBody] Usuario usuario)
         {
+            Usuario usuarioExistente = _context.Usuarios.FirstOrDefault(x => x.Login == usuario.Login);
 
+            if(usuarioExistente == null)
+            {
+                _context.Usuarios.Add(usuario);
 
-            _context.Usuarios.Add(usuario);
-            _context.SaveChanges();
-            return CreatedAtAction(nameof(RecuperaUsuarioPorId), new { Id = usuario.Id }, usuario);
+                _context.SaveChanges();
+
+                return CreatedAtAction(nameof(RecuperaUsuarioPorId), new { Id = usuario.Id }, usuario);
+
+            }
+
+            return Ok("Usuário Existente");
         }
 
         [HttpGet]
